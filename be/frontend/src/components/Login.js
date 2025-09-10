@@ -29,7 +29,7 @@ const Login = () => {
     if (error) {
       clearError();
     }
-  }, [email, password, clearError]);
+  }, [email, password, clearError, error]);
 
   const validateForm = () => {
     const errors = {};
