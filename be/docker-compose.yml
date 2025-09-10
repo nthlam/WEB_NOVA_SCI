@@ -1,0 +1,73 @@
+version: "3.8"
+
+services:
+  # --------- Backend API ---------
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    container_name: shopping-cart-backend
+    # FastAPI server
+    command: uvicorn backend.app:app --host 0.0.0.0 --port 5000 --reload
+    # Mount code vào container để phát triển hot-reload
+    volumes:
+      - ./backend:/app/backend
+      - ./.env:/app/backend/.env
+    # Expose port
+    ports:
+      - "5001:5000"
+    # Load .env 
+    depends_on:
+      - mongo
+      - redis
+
+  # --------- Celery Worker ---------
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shopping-cart-worker
+    
+    command: celery -A backend.celery_app worker --loglevel=info
+    volumes:
+      - ./backend:/app/backend
+      - ./.env:/app/backend/.env
+    depends_on:
+      - mongo
+      - redis
+
+  # --------- MongoDB ---------
+  mongo:
+    image: mongo:latest
+    container_name: mongo-db
+    # ports:
+    #   - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+      ME_CONFIG_BASICAUTH: false
+      ME_CONFIG_BASICAUTH_USERNAME: mongoexpress
+      ME_CONFIG_BASICAUTH_PASSWORD: mongoexpress
+  # --------- Redis Cache ---------
+  redis:
+    image: redis:latest
+    container_name: redis-cache
+    # ports:
+    #   - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+volumes:
+  mongo-data:
+  redis-data:
