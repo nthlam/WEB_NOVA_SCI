@@ -9,14 +9,14 @@ services:
     restart: always
     container_name: shopping-cart-backend
     # FastAPI server
-    command: uvicorn backend.app:app --host 0.0.0.0 --port 5000 --reload
+    command: uvicorn app:app --host 0.0.0.0 --port 5000
     # Mount code vào container để phát triển hot-reload
     volumes:
       - ./backend:/app/backend
       - ./.env:/app/backend/.env
-    # Expose port
+    # Expose port - map container port 5000 to host port 5000
     ports:
-      - "5001:5000"
+      - "5000:5000"
     # Load .env 
     depends_on:
       - mongo

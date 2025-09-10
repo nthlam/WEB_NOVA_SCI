@@ -18,4 +18,14 @@ RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
 # Copy the backend application code into the container
 COPY ./backend /app/backend
 
-# The command to run the application will be specified in docker-compose.yml
+# Copy the app.py entry point
+COPY app.py /app/
+
+# Expose port 5000
+EXPOSE 5000
+
+# Set environment variable for the port
+ENV PORT=5000
+
+# Run the application
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5000"]
