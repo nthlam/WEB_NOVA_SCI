@@ -6,8 +6,11 @@ python-jose[cryptography]
 celery
 redis
 fastapi-cache2[redis]
-pydantic
+pydantic[email]
 pydantic-settings
+python-multipart
+aiofiles
+email-validator
 email-validator
 python-multipart
 httpx
