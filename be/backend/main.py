@@ -11,8 +11,9 @@ import sys
 backend_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, backend_dir)
 
-# Import the app from __init__.py
-from . import app
+# Import the app from __init__.py using absolute import
+import __init__ as backend_module
+app = backend_module.app
 
 # For Render deployment
 if __name__ == "__main__":

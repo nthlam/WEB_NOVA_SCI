@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+pymongo
+passlib[bcrypt]
+python-jose[cryptography]
+celery
+redis
+fastapi-cache2[redis]
+pydantic
+pydantic-settings
+python-multipart
+aiofiles

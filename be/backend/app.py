@@ -5,7 +5,7 @@ Imports the main app instance from __init__.py
 """
 
 # Import the FastAPI app instance
-from backend import app
+from . import app
 
 # For direct execution
 if __name__ == '__main__':
